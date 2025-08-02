@@ -8,9 +8,9 @@ public class DragObject : MonoBehaviour
     private Vector3 offset;
     private Camera cam;
     
-    [SerializeField] private float speed = 100f;
-    [SerializeField] private bool invertX;
-    [SerializeField] private bool invertY;
+    // [SerializeField] private float speed = 100f;
+    // [SerializeField] private bool invertX;
+    // [SerializeField] private bool invertY;
 
     void Start()
     {
@@ -23,33 +23,33 @@ public class DragObject : MonoBehaviour
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+            int layerMask = 1 << LayerMask.NameToLayer("TargetCollider");
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
             {
                 if (hit.collider.CompareTag("Drag"))
                 {
                     selectedRb = hit.collider.GetComponent<Rigidbody>();
-                    selectedRb.useGravity = false; // Optional: prevent falling while dragging
 
                     initialDepth = Vector3.Dot(hit.point - cam.transform.position, cam.transform.forward);
                     offset = hit.transform.position - GetMouseWorldPos();
                 }
             }
         }
-        if (Input.GetMouseButtonDown(1))
-        {
-            Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-            ApplyRotation(mouseDelta);
-        }
 
         if (Input.GetMouseButtonUp(0))
         {
             if (selectedRb != null)
             {
-                selectedRb.useGravity = true;
                 selectedRb = null;
             }
         }
+        // if (Input.GetMouseButtonDown(1))
+        // {
+        //
+        //     Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        //     ApplyRotation(mouseDelta);
+        // }
     }
 
     void FixedUpdate()
@@ -68,19 +68,19 @@ public class DragObject : MonoBehaviour
         return cam.ScreenToWorldPoint(mousePos);
     }
     
-    private void ApplyRotation(Vector2 delta)
-    {
-        if (delta.sqrMagnitude <= 0.01f)
-        {
-            return;
-        }
-        
-        delta *= speed * Time.deltaTime;
-
-        float inversionX = invertX ? -1f : 1f;
-        float inversionY = invertY ? 1f : -1f;
-
-        transform.Rotate(cam.transform.up, delta.x * inversionX, Space.World);
-        transform.Rotate(cam.transform.right, delta.y * inversionY, Space.World);
-    }
+    // private void ApplyRotation(Vector2 delta)
+    // {
+    //     if (delta.sqrMagnitude <= 0.01f)
+    //     {
+    //         return;
+    //     }
+    //     
+    //     delta *= speed * Time.deltaTime;
+    //
+    //     float inversionX = invertX ? -1f : 1f;
+    //     float inversionY = invertY ? 1f : -1f;
+    //
+    //     transform.Rotate(cam.transform.up, delta.x * inversionX, Space.World);
+    //     transform.Rotate(cam.transform.right, delta.y * inversionY, Space.World);
+    // }
 }
