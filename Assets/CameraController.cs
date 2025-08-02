@@ -8,21 +8,27 @@ public class CameraController : MonoBehaviour
 
     public float rotationSpeed = 100f;
 
-    void LateUpdate()
+    private float horizontalInput;
+    private float verticalInput;
+
+    void Update()
+    {
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
+    }
+
+void FixedUpdate()
     {
         if (target == null)
         {
             return;
         }
-
-        float horizontalInput = Input.GetAxis("Horizontal");
+        horizontalInput *= -1.0f;
 
         Quaternion horizontalTurnAngle = Quaternion.AngleAxis(horizontalInput * rotationSpeed * Time.deltaTime, Vector3.up);
 
         offset = horizontalTurnAngle * offset;
-
-        float verticalInput = Input.GetAxis("Vertical");
-
+        
         Quaternion verticalTurnAngle = Quaternion.AngleAxis(verticalInput * rotationSpeed * Time.deltaTime, transform.right);
 
         offset = verticalTurnAngle * offset;
