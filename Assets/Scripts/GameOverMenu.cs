@@ -30,4 +30,12 @@ public class GameOverMenu : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(1);
+        }
+    }
 }
