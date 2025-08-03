@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class LapTracker : MonoBehaviour
@@ -5,6 +6,13 @@ public class LapTracker : MonoBehaviour
     public int currentLap = 0;
     public int totalCheckpoints = 4; // Adjust to match track
     private int nextCheckpointIndex = 0;
+    
+    [SerializeField] TextMeshPro text;
+
+    void Start()
+    {
+        text.text = "Score: " + currentLap;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,13 +22,12 @@ public class LapTracker : MonoBehaviour
             if (checkpoint.checkpointIndex == nextCheckpointIndex)
             {
                 nextCheckpointIndex++;
-                Debug.Log(nextCheckpointIndex);
                 // Completed all checkpoints, new lap
                 if (nextCheckpointIndex >= totalCheckpoints)
                 {
                     currentLap++;
                     nextCheckpointIndex = 0;
-                    Debug.Log("Lap Completed! Total Laps: " + currentLap);
+                    text.text = "Score: " + currentLap;
                 }
             }
         }
